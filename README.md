@@ -31,6 +31,9 @@ Supports five levels: `debug`, `verbose`, `info`, `warn`, error.
 ### log.level(level)
 Set the minimum log level. Default is `info`. Logs more verbose that the set level will be omitted.
 
+### log.colors(flag)
+* `flag` is a {Boolean} to use colors on the output.
+
 ### log.<level>(item[, item...])
 * `item` One or more items of any time
 Logs the supplied items at the specified level

@@ -3,6 +3,7 @@ whatClass = require 'what-class'
 prettyjson = require 'prettyjson'
 os = require 'os'
 colors = require('colors/safe')
+seqx = require 'seqx'
 
 levels =
   debug :
@@ -24,6 +25,8 @@ levels =
 logLevel = 'info'
 useColors = true
 
+seq = seqx()
+
 color = ( x, level ) ->
   return x unless useColors
   colors[ levels[ level ].color ](x)
@@ -37,7 +40,7 @@ pretty = ( obj ) ->
   x = if useColors then jsonColors else  { noColor : true }
   prettyjson.render obj, x
 
-toStr = ( obj ) ->
+_toStr = ( obj ) ->
   switch whatClass obj
     when 'Object'
       os.EOL + pretty obj
@@ -46,7 +49,12 @@ toStr = ( obj ) ->
     else
       obj
 
+toStr = _toStr
+
 log = ( level, tag ) -> ( items... ) ->
+  seq.add -> _log level, tag, items...
+
+_log = ( level, tag, items... ) ->
   return if levels[ level ].level < levels[ logLevel ].level
   list = for item in items
     txt = toStr item, level
@@ -66,6 +74,7 @@ module.exports = ( tag ) ->
   ret =
     level : ( l ) -> logLevel = l
     colors : ( flag ) -> useColors = flag
+    toStr : ( f ) -> toStr = f
 
   for own l,v of levels
     ret[ l ] = ret[ l[ 0 ] ] = log l, tag
