@@ -74,7 +74,7 @@ module.exports = ( tag ) ->
   ret =
     level : ( l ) -> logLevel = l
     colors : ( flag ) -> useColors = flag
-    toStr : ( f ) -> toStr = f
+    str : ( f ) -> toStr = f
 
   for own l,v of levels
     ret[ l ] = ret[ l[ 0 ] ] = log l, tag
